@@ -1,4 +1,5 @@
 const path = require('path');
+const gulp = require('gulp');
 const _ = require('lodash');
 
 _.extend(global, require('./functions'));

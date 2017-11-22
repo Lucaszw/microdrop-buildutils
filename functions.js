@@ -1,3 +1,9 @@
+const fs = require('fs');
+const path = require('path');
+const spawn = require('child_process').spawn;
+const del = require('del');
+const _ = require('lodash');
+
 module.exports = {};
 
 module.exports.clearDatabase = () => {
