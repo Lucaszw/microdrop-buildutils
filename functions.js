@@ -6,6 +6,20 @@ const _ = require('lodash');
 
 module.exports = {};
 
+module.exports.buildDev = async (loc="..") => {
+  const deps = _.values(getMicrodropDeps());
+  for (const [i, dep] of deps.entries()) {
+    const _path = path.resolve(loc, dep);
+    console.log("building:", dep);
+    await callCommand(`gulp --cwd ${_path} build:dev`);
+  }
+  return await build();
+}
+
+module.exports.build = async () => {
+  return await callCommand("./node_modules/.bin/webpack");
+}
+
 module.exports.clearDatabase = () => {
   return new Promise((resolve, reject) => {
     del([path.resolve("db")]).then(paths => {
@@ -18,7 +32,7 @@ module.exports.installMicrodrop = async () => {
   return await callCommand("npm install");
 }
 
-module.exports.installDeps = async(mode) => {
+module.exports._installDeps = async (mode, loc="packages") => {
   var deps = getMicrodropDeps();
   let names;
 
@@ -26,10 +40,14 @@ module.exports.installDeps = async(mode) => {
     names = _.keys(deps);
   }
   if (mode == "developer") {
-    names = _.map(_.values(deps), (d) => path.resolve("packages", d));
+    names = _.map(_.values(deps), (d) => path.resolve(loc, d));
   }
 
   return await callCommand(`npm i ${names.join(" ")}`);
+}
+
+module.exports.installDeps = async(mode, loc="packages") => {
+  return (await _installDeps(mode, loc));
 }
 
 module.exports.uninstallDeps = async () => {

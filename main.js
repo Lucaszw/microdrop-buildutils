@@ -56,10 +56,19 @@ module.exports = (gulp) => {
   });
 
   gulp.task('git:add', async function() {
-
     await callCommand('git add package-lock.json');
     await callCommand('git add -p');
     await callCommand('git commit');
-
   });
+
+  gulp.task('publish', async function(){
+    await callCommand('gulp mode:production');
+    await callCommand('gulp build');
+    await callCommand('npm version patch');
+    await callCommand('npm publish');
+    await callCommand('git push origin master');
+  });
+
+  gulp.task('build:dev', ()=>buildDev("packages"));
+
 }
