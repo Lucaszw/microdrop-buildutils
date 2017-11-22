@@ -14,11 +14,11 @@ module.exports.clearDatabase = () => {
   });
 }
 
-module.exports.installMicrodrop = async () {
+module.exports.installMicrodrop = async () => {
   return await callCommand("npm install");
 }
 
-module.exports.installDeps = async(mode) {
+module.exports.installDeps = async(mode) => {
   var deps = getMicrodropDeps();
   let names;
 
