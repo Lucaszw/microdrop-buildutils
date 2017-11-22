@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Lucaszw/microdrop-buildutils#readme",
   "dependencies": {
+    "del": "^3.0.0",
     "lodash": "^4.17.4"
   }
 }
