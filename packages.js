@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = (gulp) => {
   require('./main')(gulp);
@@ -17,6 +19,37 @@ module.exports = (gulp) => {
     let deps = getJlabDeps();
     uninstallDeps('jlab');
     _installDeps('production', '..', 'jlab');
+  });
+
+  gulp.task('create:view', () => {
+    const data = readMicrodropJSON();
+    const src = path.join(data.name, data.script);
+
+    const template = `<html>
+      <head>
+        <script src="/${src}"></script>
+      </head>
+      <body></body>
+      <script>
+        function getClass() {
+          for (const [name, cls] of Object.entries(window)){
+            if (!cls) continue;
+            if (!cls.prototype) continue;
+            if (Object.getPrototypeOf(cls).name == "UIPlugin") {
+              return {name, cls};
+            }
+          }
+        }
+        const {name, cls} = getClass();
+        document.title = name;
+        new cls(document.body);
+      </script>
+    </html>`;
+
+    if (!fs.existsSync('build')) {
+      fs.mkdirSync('build');
+    };
+    fs.writeFileSync(path.join('build', 'index.html'), template);
   });
 
 }

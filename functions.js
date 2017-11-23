@@ -17,7 +17,20 @@ module.exports.buildDev = async (loc="..") => {
 }
 
 module.exports.build = async () => {
-  return await callCommand("./node_modules/.bin/webpack");
+  // Build javascript file
+  if (fs.existsSync('./node_modules/.bin/webpack')){
+    await callCommand("./node_modules/.bin/webpack");
+  } else {
+    await callCommand("webpack");
+  }
+  
+  // Create html view
+  if (fs.existsSync('microdrop.json')) {
+    const data = readMicrodropJSON();
+    if (data.type == "ui") {
+      await callCommand(`gulp create:view`);
+    }
+  }
 }
 
 module.exports.clearDatabase = () => {
@@ -114,4 +127,8 @@ module.exports.getPlugins = () => {
     }
   }
   return plugins;
+}
+
+module.exports.readMicrodropJSON = () => {
+  return require(path.resolve('microdrop.json'));
 }
