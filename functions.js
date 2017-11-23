@@ -23,7 +23,7 @@ module.exports.build = async () => {
   } else {
     await callCommand("webpack");
   }
-  
+
   // Create html view
   if (fs.existsSync('microdrop.json')) {
     const data = readMicrodropJSON();

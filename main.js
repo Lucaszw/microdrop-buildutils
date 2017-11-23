@@ -65,6 +65,12 @@ module.exports = (gulp) => {
     await callCommand('git commit');
   });
 
+  gulp.task('reinstall:buildutils', async () => {
+    await callCommand('npm un @microdrop/buildutils');
+    await callCommand('npm i @microdrop/buildutils');
+  });
+
+
   gulp.task('publish', async function(){
     await callCommand('gulp mode:production');
     await callCommand('gulp build');

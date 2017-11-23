@@ -25,27 +25,30 @@ module.exports = (gulp) => {
     const data = readMicrodropJSON();
     const src = path.join(data.name, data.script);
 
-    const template = `<html>
-      <head>
-        <script src="/${src}"></script>
-      </head>
-      <body></body>
-      <script>
-        function getClass() {
-          for (const [name, cls] of Object.entries(window)){
-            if (!cls) continue;
-            if (!cls.prototype) continue;
-            if (Object.getPrototypeOf(cls).name == "UIPlugin") {
-              return {name, cls};
+    const template = `
+      <html>
+        <head>
+          <script src="/${src}"></script>
+        </head>
+        <body></body>
+        <script>
+          function getClass() {
+            for (const [name, cls] of Object.entries(window)){
+              try {
+                if (Object.getPrototypeOf(cls).name == "UIPlugin") {
+                  return {name, cls};
+                }
+              } catch (e) {
+                continue;
+              }
             }
           }
-        }
-        const {name, cls} = getClass();
-        document.title = name;
-        new cls(document.body);
-      </script>
-    </html>`;
-
+          const {name, cls} = getClass();
+          document.title = name;
+          new cls(document.body);
+        </script>
+      </html>
+      `;
     if (!fs.existsSync('build')) {
       fs.mkdirSync('build');
     };
