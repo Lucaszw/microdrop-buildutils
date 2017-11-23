@@ -32,12 +32,19 @@ module.exports.installMicrodrop = async () => {
   return await callCommand("npm install");
 }
 
-module.exports._installDeps = async (mode, loc="packages") => {
-  var deps = getMicrodropDeps();
-  let names;
+module.exports._installDeps = async (mode, loc="packages", type="microdrop") => {
+  let deps, names;
+  switch (type) {
+    case "microdrop":
+      deps = getMicrodropDeps();
+      break;
+    case "jlab":
+      deps = getJlabDeps();
+  }
 
   if (mode == "production") {
-    names = _.keys(deps);
+    if (_.isArray(deps)) names = deps;
+    if (_.isPlainObject(deps)) names = _.keys(deps);
   }
   if (mode == "developer") {
     names = _.map(_.values(deps), (d) => path.resolve(loc, d));
@@ -50,8 +57,17 @@ module.exports.installDeps = async(mode, loc="packages") => {
   return (await _installDeps(mode, loc));
 }
 
-module.exports.uninstallDeps = async () => {
-  var deps = _.keys(getMicrodropDeps());
+module.exports.uninstallDeps = async (type="microdrop") => {
+  let deps;
+  switch (type) {
+    case "microdrop":
+      deps = _.keys(getMicrodropDeps());
+      break;
+    case "jlab":
+      deps = getJlabDeps();
+      break;
+  }
+
   return await callCommand(`npm uninstall ${deps.join(" ")}`);
 }
 
@@ -67,6 +83,11 @@ module.exports.callCommand = (command) => {
 module.exports.getMicrodropDeps = () => {
   var packageJSON = require(path.resolve('package.json'));
   return packageJSON.microdropDependencies;
+}
+
+module.exports.getJlabDeps = () => {
+  var packageJSON = require(path.resolve('package.json'));
+  return packageJSON.jupyterlabDependencies;
 }
 
 module.exports.getPackages = () => {

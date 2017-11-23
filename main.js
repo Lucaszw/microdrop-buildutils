@@ -1,5 +1,6 @@
 const path = require('path');
 const _ = require('lodash');
+const {spawnSync, spawn, exec} = require('child_process');
 _.extend(global, require('./functions'));
 
 module.exports = (gulp) => {
@@ -48,7 +49,10 @@ module.exports = (gulp) => {
   });
 
   gulp.task('start', async function() {
-    await callCommand("node index.js");
+    console.log("Launching jupyterlab");
+    exec('jupyter lab');
+    console.log("Launching microdrop");
+    callCommand("node index.js");
   });
 
   gulp.task('reset:db', async function() {
@@ -69,6 +73,6 @@ module.exports = (gulp) => {
     await callCommand('git push origin master');
   });
 
-  gulp.task('build:dev', ()=>buildDev("packages"));
+  gulp.task('build:dev', () => buildDev("packages"));
 
 }

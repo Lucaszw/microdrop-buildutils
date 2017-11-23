@@ -13,4 +13,10 @@ module.exports = (gulp) => {
   gulp.task('build', build);
   gulp.task('build:dev', ()=>buildDev(".."));
 
+  gulp.task('update:jlab:dependencies', (cb) => {
+    let deps = getJlabDeps();
+    uninstallDeps('jlab');
+    _installDeps('production', '..', 'jlab');
+  });
+
 }
