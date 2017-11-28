@@ -48,11 +48,17 @@ module.exports = (gulp) => {
     await callCommand(cmd);
   });
 
-  gulp.task('start', async function() {
-    console.log("Launching jupyterlab");
-    exec('jupyter lab');
+  gulp.task('start:microdrop', async function() {
     console.log("Launching microdrop");
     callCommand("node index.js");
+  });
+
+  gulp.task('start:jupyterlab', async function() {
+    exec('jupyter lab');
+  });
+
+  gulp.task('start:jupyterlab:dev', async function() {
+    exec('jupyter lab --watch');
   });
 
   gulp.task('reset:db', async function() {
