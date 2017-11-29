@@ -42,6 +42,10 @@ module.exports = (gulp) => {
     await installAndBuildPlugins();
   });
 
+  gulp.task('install:plugins:clean', async function() {
+    await installAndBuildPlugins(true);
+  });
+
   gulp.task('install:microdrop', async function() {
     return await installMicrodrop();
   });

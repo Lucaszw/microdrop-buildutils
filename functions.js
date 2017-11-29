@@ -6,11 +6,12 @@ const _ = require('lodash');
 
 module.exports = {};
 
-module.exports.installAndBuildPlugins = async () => {
+module.exports.installAndBuildPlugins = async (clean) => {
   const plugins = _.values(getPlugins());
   for (const [i, _path] of plugins.entries()) {
     await callCommand(`npm install`, _path);
     await callCommand(`gulp --cwd ${_path} build`);
+    if (clean) await del(path.resolve(_path, 'node_modules'));
   }
   return await build();
 }
