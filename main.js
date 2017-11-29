@@ -93,6 +93,8 @@ module.exports = (gulp) => {
     await callCommand('git push origin master');
   });
 
+  gulp.task('build:ui', () => buildUI());
+  gulp.task('build:ui:clean', () => buildUI(true));
   gulp.task('build:dev', () => buildDev("packages"));
 
 }

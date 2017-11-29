@@ -6,6 +6,20 @@ const _ = require('lodash');
 
 module.exports = {};
 
+module.exports.buildUI = async (clean) => {
+  const _path = path.resolve('.', 'ui/src');
+  await callCommand('npm install', _path);
+  await callCommand('webpack --config phosphor.config.js', _path);
+  await callCommand('webpack --config plugin-manager.config.js', _path);
+  if (clean) {
+    const parent = path.resolve(_path, 'node_modules');
+    const webclientPath = path.join(parent, '@mqttclient', '**');
+    const microdropPath = path.join(parent, '@microdrop', '**');
+
+    await del([path.resolve(parent, '**'), `!${parent}`, `!${webclientPath}`, `!${microdropPath}`]);
+  }
+}
+
 module.exports.installAndBuildPlugins = async (clean) => {
   const plugins = _.values(getPlugins());
   for (const [i, _path] of plugins.entries()) {
