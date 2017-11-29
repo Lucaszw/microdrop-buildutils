@@ -10,7 +10,7 @@ module.exports.installAndBuildPlugins = async () => {
   const plugins = _.values(getPlugins());
   for (const [i, _path] of plugins.entries()) {
     await callCommand(`npm install`, _path);
-    await callCommand(`gulp --cwd ${_path} build:dev`);
+    await callCommand(`gulp --cwd ${_path} build`);
   }
   return await build();
 }
