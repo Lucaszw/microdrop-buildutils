@@ -6,6 +6,15 @@ const _ = require('lodash');
 
 module.exports = {};
 
+module.exports.installAndBuildPlugins = async () => {
+  const plugins = _.values(getPlugins());
+  for (const [i, _path] of plugins.entries()) {
+    await callCommand(`npm install`, _path);
+    await callCommand(`gulp --cwd ${_path} build:dev`);
+  }
+  return await build();
+}
+
 module.exports.buildDev = async (loc="..") => {
   const deps = _.values(getMicrodropDeps());
   for (const [i, dep] of deps.entries()) {
@@ -84,9 +93,12 @@ module.exports.uninstallDeps = async (type="microdrop") => {
   return await callCommand(`npm uninstall ${deps.join(" ")}`);
 }
 
-module.exports.callCommand = (command) => {
+module.exports.callCommand = (command, cwd) => {
+  var options = {stdio: 'inherit', shell: true};
+  if (cwd) options.cwd = cwd;
+
   return new Promise((resolve, reject) => {
-    var child = spawn(command, {stdio: 'inherit', shell: true});
+    var child = spawn(command, options);
     child.on('exit', function (code) {
       resolve('child process exited with code ' + code.toString());
     });

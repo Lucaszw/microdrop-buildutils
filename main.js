@@ -38,6 +38,11 @@ module.exports = (gulp) => {
     return await installDeps("developer");
   });
 
+  gulp.task('install:plugins', async function() {
+    await installMicrodrop();
+    await installAndBuildPlugins();
+  });
+  
   gulp.task('install:microdrop', async function() {
     return await installMicrodrop();
   });
