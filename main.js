@@ -61,6 +61,11 @@ module.exports = (gulp) => {
     callCommand("node index.js");
   });
 
+  gulp.task('link:jupyterlab', async function() {
+    const extension_path = path.resolve('./packages/jupyterlab-extension');
+    callCommand(`jupyter labextesion link ${extension_path}`);
+  });
+
   gulp.task('start:jupyterlab', async function() {
     exec('jupyter lab');
   });
