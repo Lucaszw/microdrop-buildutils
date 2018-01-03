@@ -38,11 +38,11 @@ module.exports = (gulp) => {
     return await installDeps("developer");
   });
 
-  gulp.task('install:plugins', async function() {
+  gulp.task('build:ui-plugins', async function() {
     await installAndBuildPlugins();
   });
 
-  gulp.task('install:plugins:clean', async function() {
+  gulp.task('build:ui-plugins:clean', async function() {
     await installAndBuildPlugins(true);
   });
 
@@ -59,6 +59,11 @@ module.exports = (gulp) => {
   gulp.task('start:microdrop', async function() {
     console.log("Launching microdrop");
     callCommand("node index.js");
+  });
+
+  gulp.task('link:jupyterlab', async function() {
+    const extension_path = path.resolve('./packages/jupyterlab-extension');
+    callCommand(`jupyter labextension link ${extension_path}`);
   });
 
   gulp.task('start:jupyterlab', async function() {
@@ -84,6 +89,10 @@ module.exports = (gulp) => {
     await callCommand('npm i @microdrop/buildutils');
   });
 
+  gulp.task('build', async function() {
+    await callCommand('gulp build:ui');
+    await callCommand('gulp build:ui-plugins');
+  });
 
   gulp.task('publish', async function(){
     await callCommand('gulp mode:production');

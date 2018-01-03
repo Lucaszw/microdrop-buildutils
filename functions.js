@@ -8,9 +8,11 @@ module.exports = {};
 
 module.exports.buildUI = async (clean) => {
   const _path = path.resolve('.', 'ui/src');
+  const webpackPath = path.resolve('./node_modules/.bin/webpack');
+
   await callCommand('npm install', _path);
-  await callCommand('webpack --config phosphor.config.js', _path);
-  await callCommand('webpack --config plugin-manager.config.js', _path);
+  await callCommand(`${webpackPath} --config phosphor.config.js`, _path);
+  await callCommand(`${webpackPath} --config plugin-manager.config.js`, _path);
   if (clean) {
     const parent = path.resolve(_path, 'node_modules');
     const webclientPath = path.join(parent, '@mqttclient', '**');
@@ -42,8 +44,9 @@ module.exports.buildDev = async (loc="..") => {
 
 module.exports.build = async () => {
   // Build javascript file
-  if (fs.existsSync('./node_modules/.bin/webpack')){
-    await callCommand("./node_modules/.bin/webpack");
+  const webpackPath = path.resolve('./node_modules/.bin/webpack');
+  if (fs.existsSync(webpackPath)){
+    await callCommand(webpackPath);
   } else {
     await callCommand("webpack");
   }
