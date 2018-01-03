@@ -23,7 +23,7 @@ module.exports = (gulp) => {
 
   gulp.task('create:view', () => {
     const data = readMicrodropJSON();
-    const src = path.join(data.name, data.script);
+    const src = path.posix.join(data.name, data.script);
 
     const template = `
       <html>
