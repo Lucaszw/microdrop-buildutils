@@ -44,7 +44,7 @@ module.exports.buildDev = async (loc="..") => {
 
 module.exports.build = async () => {
   // Build javascript file
-  const webpackPath = path.resolve('./node_modules/.bin/webpack');
+  const webpackPath = path.resolve('.','node_modules/.bin/webpack');
   if (fs.existsSync(webpackPath)){
     await callCommand(webpackPath);
   } else {
