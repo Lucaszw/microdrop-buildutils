@@ -58,7 +58,7 @@ module.exports = (gulp) => {
 
   gulp.task('start:microdrop', async function() {
     console.log("Launching microdrop");
-    callCommand("node index.js");
+    callCommand(`${path.resolve("node_modules/.bin/electron")} .`);
   });
 
   gulp.task('link:jupyterlab', async function() {
